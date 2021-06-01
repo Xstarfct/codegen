@@ -1,0 +1,165 @@
+<#include "/macro.include"/>
+<#assign className = table.className>
+<#assign classNameLower = className?uncap_first>
+<#assign classNameFirstLower = table.classNameFirstLower>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<#macro mapperEl value>${r"#{"}${value}}</#macro>
+<#macro namespace>${className}.</#macro>
+
+<mapper namespace="<#include "/mapper_path.include"/>.${className}Mapper">
+  <resultMap id="${className}Result" type="<#include "/DO_path.include"/>.${className}DO" >
+    <#list table.columns as column>
+    <#if column.columnNameFirstLower == 'id'>
+    <id column="${column.sqlName}" property="${column.columnNameFirstLower}" />
+    <#else>
+    <result column="${column.sqlName}" property="${column.columnNameFirstLower}" />
+    </#if>
+    </#list>
+  </resultMap>
+
+  <!-- 用于select查询公用抽取的列 -->
+  <sql id="columns">
+    <#list table.columns as column>${column.sqlName}<#if column_has_next>,</#if></#list>
+  </sql>
+
+  <insert id="insert" parameterType="<#include "/DO_path.include"/>.${className}DO" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO ${table.sqlName} (
+    <#list table.columns as column>
+    <#if column.columnNameFirstLower != "id">
+      ${column.sqlName}<#if column_has_next>,</#if>
+    </#if>
+    </#list>
+    ) VALUES (
+    <#list table.columns as column>
+      <#if column.columnNameFirstLower == "createDate"
+      || column.columnNameFirstLower == "updateDate"
+      || column.columnNameFirstLower == "createTime"
+      || column.columnNameFirstLower == "updateTime">
+      now()<#if column_has_next>,</#if>
+      <#elseif column.columnNameFirstLower != "id">
+      ${r"#"}{${column.columnNameFirstLower}}<#if column_has_next>,</#if>
+      </#if>
+    </#list>
+    )
+  </insert>
+
+  <insert id="insertSelective" parameterType="<#include "/DO_path.include"/>.${className}DO" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO ${table.sqlName}
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+    <#list table.columns as column>
+      <#if column.columnNameFirstLower == "createDate"
+      || column.columnNameFirstLower == "updateDate"
+      || column.columnNameFirstLower == "createTime"
+      || column.columnNameFirstLower == "updateTime">
+      ${column.sqlName}<#if column_has_next>,</#if>
+      <#elseif column.columnNameFirstLower != "id">
+      <if test="${column.columnNameFirstLower} != null">${column.sqlName}<#if column_has_next>,</#if></if>
+      </#if>
+    </#list>
+    </trim>
+    <trim prefix="VALUES (" suffix=")" suffixOverrides="," >
+    <#list table.columns as column>
+      <#if column.columnNameFirstLower == "createDate"
+      || column.columnNameFirstLower == "updateDate"
+      || column.columnNameFirstLower == "createTime"
+      || column.columnNameFirstLower == "updateTime">
+      now(),
+      <#elseif column.columnNameFirstLower != "id">
+      <if test="${column.columnNameFirstLower} != null">${r"#"}{${column.columnNameFirstLower}},</if>
+      </#if>
+    </#list>
+    </trim>
+  </insert>
+
+  <insert id="insertOnDuplicateUpdate" parameterType="<#include "/DO_path.include"/>.${className}DO" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO ${table.sqlName} (
+    <#list table.columns as column>
+    <#if column.columnNameFirstLower != "id">
+      ${column.sqlName}<#if column_has_next>,</#if>
+    </#if>
+    </#list>
+    ) VALUES (
+    <#list table.columns as column>
+    <#if column.columnNameFirstLower == "createDate"
+      || column.columnNameFirstLower == "updateDate"
+      || column.columnNameFirstLower == "createTime"
+      || column.columnNameFirstLower == "updateTime">
+      now()<#if column_has_next>,</#if>
+    <#elseif column.columnNameFirstLower != "id">
+      ${r"#"}{${column.columnNameFirstLower}}<#if column_has_next>,</#if>
+    </#if>
+    </#list>
+    )
+    <trim prefix="ON DUPLICATE KEY UPDATE " suffixOverrides="," >
+    <#list table.columns as column>
+    <#if column.columnNameFirstLower == "updateDate"
+      || column.columnNameFirstLower == "updateTime">
+    ${column.sqlName} = now(),
+    <#elseif column.columnNameFirstLower != "id"
+      && column.columnNameFirstLower != "createDate"
+      && column.columnNameFirstLower != "createTime">
+    ${column.sqlName} = VALUES(${column.sqlName}),
+    </#if>
+    </#list>
+    </trim>
+  </insert>
+
+  <insert id="batchInsert" parameterType="list">
+    INSERT INTO ${table.sqlName} (
+    <#list table.columns as column>
+      <#if column.columnNameFirstLower != "id">
+      ${column.sqlName}<#if column_has_next>,</#if>
+    </#if>
+    </#list>
+    ) VALUES
+    <foreach collection="list" item="item" index="index" separator=",">
+    (
+      <#list table.columns as column>
+      <#if column.columnNameFirstLower == "createDate"
+      || column.columnNameFirstLower == "updateDate"
+      || column.columnNameFirstLower == "createTime"
+      || column.columnNameFirstLower == "updateTime">
+      now()<#if column_has_next>,</#if>
+      <#elseif column.columnNameFirstLower != "id">
+      ${r"#"}{item.${column.columnNameFirstLower}}<#if column_has_next>,</#if>
+      </#if>
+      </#list>
+    )
+    </foreach>
+  </insert>
+
+  <update id="update" parameterType="<#include "/DO_path.include"/>.${className}DO">
+    UPDATE ${table.sqlName}
+    <set>
+      <#list table.columns as column>
+      <#if column.columnNameFirstLower == 'createDate'
+      || column.columnNameFirstLower == "createTime"
+      || column.columnNameFirstLower == 'creator'
+      || column.columnNameFirstLower == 'id'>
+      <#elseif column.columnNameFirstLower == 'updateDate'>
+      update_date = now()<#if column_has_next>,</#if>
+      <#elseif column.columnNameFirstLower == 'updateTime'>
+      update_time = now()<#if column_has_next>,</#if>
+      <#else>
+      <if test="${column.columnNameFirstLower} != null"> ${column.sqlName} = ${"#{"+column.columnNameFirstLower+"}"}<#if column_has_next>,</#if></if>
+        </#if>
+        </#list>
+    </set>
+    WHERE id = ${r"#"}{id}
+  </update>
+
+  <select id="getById" parameterType="java.lang.Long" resultMap="${className}Result">
+    SELECT <include refid="columns"/> FROM ${table.sqlName}
+    WHERE id = ${r"#"}{id}
+  </select>
+
+  <select id="getByIds" parameterType="list" resultMap="${className}Result">
+    SELECT <include refid="columns"/> FROM ${table.sqlName}
+    WHERE id in
+    <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+      ${r"#"}{item}
+    </foreach>
+  </select>
+</mapper>

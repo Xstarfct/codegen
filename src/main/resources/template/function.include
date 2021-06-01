@@ -1,0 +1,5 @@
+<#function columnAliasNew columnAlias>
+<#assign s1=columnAlias?split(":")>
+<#assign s2=s1?first?split("(")>
+	<#return s2?first?trim>
+</#function>

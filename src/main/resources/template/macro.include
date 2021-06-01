@@ -1,0 +1,37 @@
+<#macro jspEl value>${r"$"}!${classNameLower}.${value}</#macro>
+<#macro jspElDto value>${r"$"}!${classNameLower}DTO.${value}</#macro>
+<#macro generateConstructor constructor>
+	public ${constructor}(){
+	}
+<#--
+	public ${constructor}(
+	<#list table.compositeIdColumns as column>
+		${column.simpleJavaType} ${column.columnNameFirstLower}<#if column_has_next>,</#if>
+	</#list>
+	){
+	<#list table.compositeIdColumns as column>
+		<#if column.pk>
+		this.${column.columnNameFirstLower}= ${column.columnNameFirstLower};
+		</#if>
+	</#list>
+	}
+-->
+</#macro>
+
+<#macro generateDTOConstructor constructor>
+	public ${constructor}DTO(){
+	}
+<#--
+	public ${constructor}DTO(
+	<#list table.compositeIdColumns as column>
+		${column.simpleJavaType} ${column.columnNameFirstLower}<#if column_has_next>,</#if>
+	</#list>
+	){
+	<#list table.compositeIdColumns as column>
+		<#if column.pk>
+		this.${column.columnNameFirstLower}= ${column.columnNameFirstLower};
+		</#if>
+	</#list>
+	}
+-->
+</#macro>
