@@ -73,39 +73,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-ma
     </trim>
   </insert>
 
-  <insert id="insertOnDuplicateUpdate" parameterType="<#include "/DO_path.include"/>.${className}DO" useGeneratedKeys="true" keyProperty="id">
-    INSERT INTO ${table.sqlName} (
-    <#list table.columns as column>
-    <#if column.columnNameFirstLower != "id">
-      ${column.sqlName}<#if column_has_next>,</#if>
-    </#if>
-    </#list>
-    ) VALUES (
-    <#list table.columns as column>
-    <#if column.columnNameFirstLower == "createDate"
-      || column.columnNameFirstLower == "updateDate"
-      || column.columnNameFirstLower == "createTime"
-      || column.columnNameFirstLower == "updateTime">
-      now()<#if column_has_next>,</#if>
-    <#elseif column.columnNameFirstLower != "id">
-      ${r"#"}{${column.columnNameFirstLower}}<#if column_has_next>,</#if>
-    </#if>
-    </#list>
-    )
-    <trim prefix="ON DUPLICATE KEY UPDATE " suffixOverrides="," >
-    <#list table.columns as column>
-    <#if column.columnNameFirstLower == "updateDate"
-      || column.columnNameFirstLower == "updateTime">
-    ${column.sqlName} = now(),
-    <#elseif column.columnNameFirstLower != "id"
-      && column.columnNameFirstLower != "createDate"
-      && column.columnNameFirstLower != "createTime">
-    ${column.sqlName} = VALUES(${column.sqlName}),
-    </#if>
-    </#list>
-    </trim>
-  </insert>
-
   <insert id="batchInsert" parameterType="list">
     INSERT INTO ${table.sqlName} (
     <#list table.columns as column>

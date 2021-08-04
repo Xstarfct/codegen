@@ -17,8 +17,6 @@ public interface ${className}Mapper {
 
     Long insertSelective(${className}DO entity);
     
-    Long insertOnDuplicateUpdate(${className}DO entity);
-
     Long batchInsert(List<${className}DO> list);
 
     Long update(${className}DO entity);

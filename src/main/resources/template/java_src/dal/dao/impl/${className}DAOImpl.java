@@ -53,19 +53,6 @@ public class ${className}DAOImpl implements ${className}DAO {
     }
     
     @Override
-    public Long insertOnDuplicateUpdate(${className}DTO dto) {
-        if (dto == null) {
-            return 0L;
-        }
-        
-        ${className}DO aDO = convert.toDO(dto);
-        
-        Long result = ${classNameLower}Mapper.insertOnDuplicateUpdate(aDO);
-
-        return result > 0 ? aDO.getId() : Long.valueOf(0L);
-    }
-
-    @Override
     public Long batchInsert(List<${className}DTO> dtoList) {
         if (CollectionUtils.isEmpty(dtoList)) {
             return 0L;

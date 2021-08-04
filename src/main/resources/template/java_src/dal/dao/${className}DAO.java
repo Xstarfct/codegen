@@ -14,8 +14,6 @@ public interface ${className}DAO{
     
     Long insertSelective(${className}DTO dto);
     
-    Long insertOnDuplicateUpdate(${className}DTO dto);
-
     Long batchInsert(List<${className}DTO> dtoList);
 
     Long update(${className}DTO dto);

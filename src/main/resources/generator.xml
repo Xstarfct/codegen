@@ -8,12 +8,12 @@
 	</comment>
 
 	<!--<entry key="basepackage">la.kaike.kusercen</entry>-->
-	<entry key="basepackage">la.kaike.recruitprod</entry>
+	<entry key="basepackage">la.kaike.cpcoreprod</entry>
 
 	<!-- jsp namespace: web/${namespace}/${className}/list.jsp -->
-	<entry key="namespace"></entry>
+	<entry key="namespace">ai</entry>
 
-	<entry key="outRoot">D:\work\kkl\recruitprod\recruitprod-dal\target</entry>
+	<entry key="outRoot">C:\work\kkl\cpcoreprod\cpcoreprod-dal\target</entry>
 <!--	<entry key="outRoot">/Users/xstarfct/work/mistong/cpcoreprod/cpcoreprod-dal/target</entry>-->
 <!--	<entry key="outRoot">/Users/xstarfct/work/mistong/wmsprod/wmsprod-dal/target</entry>-->
 
@@ -40,9 +40,9 @@
 	<entry key="java_typemapping.java.sql.Timestamp">java.util.Date</entry>
 
 	<!-- Mysql -->
-	<entry key="jdbc_url">jdbc:mysql://10.0.0.53:3502/estudy_recruit?useUnicode=true&amp;characterEncoding=UTF-8</entry>
+<!--	<entry key="jdbc_url">jdbc:mysql://10.0.0.53:3502/estudy_recruit?useUnicode=true&amp;characterEncoding=UTF-8</entry>-->
 <!--	<entry key="jdbc_url">jdbc:mysql://10.0.0.53:3502/estudy_db?useUnicode=true&amp;characterEncoding=UTF-8</entry>-->
-<!--	<entry key="jdbc_url">jdbc:mysql://10.0.0.53:3502/estudy_cpcore?useUnicode=true&amp;characterEncoding=UTF-8</entry>-->
+	<entry key="jdbc_url">jdbc:mysql://10.0.0.53:3502/estudy_cpcore?useUnicode=true&amp;characterEncoding=UTF-8</entry>
 <!--	<entry key="jdbc_url">jdbc:mysql://10.0.0.53:3502/estudy_wms?useUnicode=true&amp;characterEncoding=UTF-8</entry>-->
 	<entry key="jdbc_driver">com.mysql.jdbc.Driver</entry>
 

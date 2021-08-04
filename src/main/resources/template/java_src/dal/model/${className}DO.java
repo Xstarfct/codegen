@@ -8,10 +8,12 @@ package <#include "/DO_path.include"/>;
 import la.kaike.platform.common.result.ToString;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 <#include "/java_imports.include">
 @Getter
 @Setter
+@Accessors(chain = true)
 public class ${className}DO extends ToString {
 	private static final long serialVersionUID = 1L;
 
